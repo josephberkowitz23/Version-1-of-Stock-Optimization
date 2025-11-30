@@ -4,27 +4,6 @@ This repository downloads historical prices from Yahoo Finance, converts them to
 monthly returns, sweeps a variance cap to trace the efficient frontier, and
 visualizes both the frontier and the corresponding allocations.
 
-## Quick Start (local)
-1. **Clone** the repository and enter the folder:
-   ```bash
-   git clone https://github.com/josephberkowitz23/Version-1-of-Stock-Optimization.git
-   cd Version-1-of-Stock-Optimization
-   ```
-2. **Create a virtual environment:**
-   ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate  # macOS/Linux
-   # .venv\\Scripts\\Activate.ps1  # Windows PowerShell
-   ```
-3. **Install the dependencies:**
-   ```bash
-   pip install -r requirements
-   ```
-4. **Run the CLI:**
-   ```bash
-   python main.py --tickers GE KO NVDA --start-date 2020-01-01 --end-date 2024-01-01
-   ```
-
 ## Guided Google Colab walkthrough
 > Run these three cells in order inside a Colab notebook. Each cell includes a
 > short note so you know what it is doing.
@@ -61,41 +40,8 @@ TICKERS = "AAPL MSFT NVDA AMZN GOOGL"
 ```
 
 When the run finishes, the notebook will display two matplotlib figures: the
-efficient frontier and the allocation-by-risk chart.
-
-## Running on macOS local machine
-1. Make sure Homebrew has installed a recent Python (3.10+ recommended).
-2. From the project root, create/activate a virtual environment and install the
-   requirements (see Quick Start). IPOPT is pulled in through `idaes-pse`, so no
-   manual compilation is necessary.
-3. Execute the CLI. For example:
-   ```bash
-   python main.py --tickers AAPL MSFT NVDA --start-date 2018-01-01 --end-date 2024-01-01
-   ```
-
-## CLI Usage
-The CLI exposes the core knobs:
-```bash
-python main.py \
-  --tickers GE KO NVDA \
-  --start-date 2020-01-01 \
-  --end-date 2024-01-01 \
-  --n-points 250 \
-  --ipopt-path /content/bin/ipopt
-```
-- `--tickers`: space-separated list of equities.
-- `--start-date` / `--end-date`: inclusive date range pulled from Yahoo Finance.
-- `--n-points`: number of variance caps (higher = denser frontier).
-- `--ipopt-path`: location of the IPOPT solver installed via `idaes get-extensions`.
-
-## Example Output
-Running the example command produces two figures:
-1. **Efficient Frontier:** risk (variance) on the x-axis, expected monthly return
-   on the y-axis. The dots correspond to IPOPT solutions under progressively
-   looser variance caps.
-2. **Allocation vs Risk:** Each line shows how a ticker's weight changes as the
-   risk budget grows. The plot confirms that allocations remain in the
-   long-only, fully-invested region (0–1 on the y-axis).
+efficient frontier and the allocation-by-risk chart. Open up the output folder
+within your drive in order to see the formulated figures.
 
 ## Project Layout
 ```
