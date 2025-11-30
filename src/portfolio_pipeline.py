@@ -13,6 +13,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import yfinance as yf
+import os
 
 from pyomo.environ import (
     ConcreteModel,
@@ -30,9 +31,7 @@ from pyomo.opt import SolverFactory, TerminationCondition
 IPOPT_PATH = "/content/bin/ipopt"
 
 
-# ---------------------------------------------------------------------------
 # Data helpers
-# ---------------------------------------------------------------------------
 
 def download_monthly_returns(
     tickers: Sequence[str],
@@ -88,9 +87,7 @@ def download_monthly_returns(
     return monthly_returns
 
 
-# ---------------------------------------------------------------------------
 # Optimization helpers
-# ---------------------------------------------------------------------------
 
 def build_markowitz_model(returns_df: pd.DataFrame):
     """Build a Pyomo Markowitz model (long-only, fully invested)."""
@@ -193,25 +190,38 @@ def sweep_efficient_frontier(
     return frontier_df, alloc_df
 
 
-# ---------------------------------------------------------------------------
 # Plotting helpers
-# ---------------------------------------------------------------------------
 
 def plot_frontier(frontier_df: pd.DataFrame) -> None:
-    """Plot the efficient frontier."""
+    """Plot the efficient frontier and save to output/."""
+
+    # Ensure output folder exists (relative path: ./output)
+    os.makedirs("output", exist_ok=True)
 
     plt.figure(figsize=(8, 5))
-    plt.plot(frontier_df["Risk"], frontier_df["Return"], marker="o", linestyle="-", markersize=3)
+    plt.plot(
+        frontier_df["Risk"],
+        frontier_df["Return"],
+        marker="o",
+        linestyle="-",
+        markersize=3,
+    )
     plt.title("Efficient Frontier")
     plt.xlabel("Portfolio Risk (Variance)")
     plt.ylabel("Expected Monthly Return")
     plt.grid(True)
     plt.tight_layout()
+
+    # Save figure
+    plt.savefig("output/efficient_frontier.png", dpi=300)
+
     plt.show()
 
-
 def plot_allocations(alloc_df: pd.DataFrame) -> None:
-    """Plot allocation weights as a function of portfolio risk."""
+    """Plot allocation weights as a function of portfolio risk and save to output/."""
+
+    # Ensure output folder exists
+    os.makedirs("output", exist_ok=True)
 
     plt.figure(figsize=(10, 6))
     for col in alloc_df.columns:
@@ -230,12 +240,13 @@ def plot_allocations(alloc_df: pd.DataFrame) -> None:
     plt.grid(True)
     plt.legend(bbox_to_anchor=(1.05, 1), loc="upper left")
     plt.tight_layout()
+
+    # Save figure
+    plt.savefig("output/allocation_plot.png", dpi=300)
+
     plt.show()
-
-
-# ---------------------------------------------------------------------------
+    
 # Convenience wrapper
-# ---------------------------------------------------------------------------
 
 def run_portfolio_example(
     tickers: Sequence[str],
