@@ -4,11 +4,11 @@ This repository downloads historical prices from Yahoo Finance, converts them to
 monthly returns, sweeps a variance cap to trace the efficient frontier, and
 visualizes both the frontier and the corresponding allocations.
 
-## Quick Start
+## Quick Start (local)
 1. **Clone** the repository and enter the folder:
    ```bash
-   git clone https://github.com/<your-username>/bdm_fall2025_opt.git
-   cd bdm_fall2025_opt
+   git clone https://github.com/josephberkowitz23/Version-1-of-Stock-Optimization.git
+   cd Version-1-of-Stock-Optimization
    ```
 2. **Create a virtual environment:**
    ```bash
@@ -18,26 +18,50 @@ visualizes both the frontier and the corresponding allocations.
    ```
 3. **Install the dependencies:**
    ```bash
-   pip install -r requirements.txt
+   pip install -r requirements
    ```
 4. **Run the CLI:**
    ```bash
    python main.py --tickers GE KO NVDA --start-date 2020-01-01 --end-date 2024-01-01
    ```
 
-## Running in Google Colab
-1. Upload (or clone) the repo inside your Colab workspace.
-2. Install the scientific stack plus IPOPT extensions:
-   ```python
-   !pip install -r requirements.txt
-   !idaes get-extensions --to /content/bin
-   ```
-3. Point the CLI to the freshly installed IPOPT binary:
-   ```python
-   !python main.py --tickers GE KO NVDA --ipopt-path /content/bin/ipopt
-   ```
-4. The script will display two matplotlib figures in the output cell: the
-   efficient frontier and the allocation-by-risk chart.
+## Guided Google Colab walkthrough
+> Run these three cells in order inside a Colab notebook. Each cell includes a
+> short note so you know what it is doing.
+
+**1) Clone and set up the repo** – pull the code, move into the folder, and
+install Python dependencies.
+```python
+# Clone the repo (edit <your-username> if needed)
+!git clone https://github.com/josephberkowitz23/Version-1-of-Stock-Optimization.git
+
+# Move into the project folder
+%cd Version-1-of-Stock-Optimization
+
+# Install Python dependencies
+!python -m pip install -r requirements
+```
+
+**2) Add the solver** – download IPOPT (plus supporting binaries) to a local
+`/content/bin` directory.
+```python
+!idaes get-extensions --to /content/bin
+```
+
+**3) Run the tutorial** – set your tickers and execute the main script, pointing
+to the IPOPT binary you just downloaded.
+```python
+TICKERS = "AAPL MSFT NVDA AMZN GOOGL"
+
+!python main.py \
+    --tickers {TICKERS} \
+    --start-date 2020-01-01 \
+    --end-date 2024-01-01 \
+    --ipopt-path /content/bin/ipopt
+```
+
+When the run finishes, the notebook will display two matplotlib figures: the
+efficient frontier and the allocation-by-risk chart.
 
 ## Running on macOS local machine
 1. Make sure Homebrew has installed a recent Python (3.10+ recommended).
